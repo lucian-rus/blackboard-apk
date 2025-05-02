@@ -16,11 +16,12 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
     private var currentColorCounter = 0
     private var currentColor = Color.WHITE
 
+    // contains data that should be drawn
     private val paths = mutableListOf<Pair<Path, Paint>>()
     private val path = Path()
 
-    private var previousX = 0f
-    private var previousY = 0f
+    // contains the coordinates list to which the paths are based off of
+    private val coordList = ArrayList<Pair<Float, Float>>()
 
     private val paintConfig = Paint().apply {
         isAntiAlias = true
@@ -45,28 +46,32 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
             true
         }
 
+        /* @todo: handle cases in which the server was not previously started */
         client.init()
     }
 
     private fun startDrawing(x: Float, y: Float) {
         path.reset()
+
         path.moveTo(x, y)
-        previousX = x
-        previousY = y
+        coordList.add(Pair(x, y))
 
         // send data
         client.writeCoordinates(x.toInt(), y.toInt())
     }
 
     private fun continueDrawing(x: Float, y: Float) {
+        // have to error check
+        val previousX = coordList.last().first;
+        val previousY = coordList.last().second;
         path.quadTo(previousX, previousY, (x + previousX) / 2, (y + previousY) / 2)
 
         // send data
         client.writeCoordinates(x.toInt(), y.toInt())
 
-        previousX = x
-        previousY = y
         path.lineTo(previousX, previousY)
+        coordList.add(Pair(x, y))
+
         val paint = Paint(paintConfig)
         paint.color = currentColor
         paths.add(Pair(Path(path), paint))
@@ -75,11 +80,22 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
     private fun endDrawing() {
         client.writeCoordinates(0, 0)
 
+        // have to error check
+        val previousX = coordList.last().first;
+        val previousY = coordList.last().second;
+
         path.lineTo(previousX, previousY)
+        coordList.add(Pair(x, y))
+
         val paint = Paint(paintConfig)
         paint.color = currentColor
         paths.add(Pair(Path(path), paint))
         path.reset()
+    }
+
+    fun panCanvas() {
+        val xOffset = 10
+        val yOffset = 10
     }
 
     fun clearCanvas() {
