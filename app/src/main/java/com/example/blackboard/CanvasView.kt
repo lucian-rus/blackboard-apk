@@ -30,7 +30,8 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         strokeJoin = Paint.Join.ROUND
     }
 
-    private val client = ClientSocket()
+//    private val connection = ClientSocket()
+    private val connection = ServerSocket()
 
     init {
         setOnTouchListener { _, event ->
@@ -47,7 +48,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         }
 
         /* @todo: handle cases in which the server was not previously started */
-        client.init()
+        connection.init()
     }
 
     private fun startDrawing(x: Float, y: Float) {
@@ -57,7 +58,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         coordList.add(Pair(x, y))
 
         // send data
-        client.writeCoordinates(x.toInt(), y.toInt())
+        connection.writeCoordinates(x.toInt(), y.toInt())
     }
 
     private fun continueDrawing(x: Float, y: Float) {
@@ -67,7 +68,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         path.quadTo(previousX, previousY, (x + previousX) / 2, (y + previousY) / 2)
 
         // send data
-        client.writeCoordinates(x.toInt(), y.toInt())
+        connection.writeCoordinates(x.toInt(), y.toInt())
 
         path.lineTo(previousX, previousY)
         coordList.add(Pair(x, y))
@@ -78,7 +79,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
     }
 
     private fun endDrawing() {
-        client.writeCoordinates(0, 0)
+        connection.writeCoordinates(0, 0)
 
         // have to error check
         val previousX = coordList.last().first;
@@ -102,7 +103,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         paths.clear()
         invalidate()
 
-        client.writeErase()
+        connection.writeErase()
     }
 
     fun changeColor() {
@@ -133,7 +134,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
             currentColor = Color.RED
         }
 
-        client.writeChangeColor()
+        connection.writeChangeColor()
     }
 
     override fun onDraw(canvas: Canvas) {
