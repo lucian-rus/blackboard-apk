@@ -50,7 +50,7 @@
             android:id="@+id/layerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.4"
+            android:alpha="0.1"
             android:backgroundTint="#7E7979"
             android:text="layers" />
 
@@ -74,7 +74,7 @@
             android:id="@+id/selectButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.4"
+            android:alpha="0.1"
             android:backgroundTint="#7E7979"
             android:text="select" />
 
@@ -98,7 +98,7 @@
             android:id="@+id/gridToggleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.4"
+            android:alpha="0.1"
             android:backgroundTint="#7E7979"
             android:text="grid" />
 

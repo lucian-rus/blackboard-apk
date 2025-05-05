@@ -23,9 +23,10 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
     // contains the coordinates list to which the paths are based off of
     private val coordList = ArrayList<Pair<Float, Float>>()
 
-    private val paintConfig = Paint().apply {
+    private var currentLineWidth = 1;
+    private var paintConfig = Paint().apply {
         isAntiAlias = true
-        strokeWidth = 5f
+        strokeWidth = 3f * currentLineWidth.toFloat()
         style = Paint.Style.STROKE
         strokeJoin = Paint.Join.ROUND
     }
@@ -103,7 +104,7 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         paths.clear()
         invalidate()
 
-        connection.writeErase()
+        connection.writeClearCanvas()
     }
 
     fun changeColor() {
@@ -135,6 +136,28 @@ class CanvasView(context:Context, attributes: AttributeSet) : View(context, attr
         }
 
         connection.writeChangeColor()
+    }
+
+    fun changeLineWidth() {
+        currentLineWidth++
+        if(8 == currentLineWidth) {
+            currentLineWidth = 1
+        }
+
+        paintConfig.strokeWidth = 3f * currentLineWidth
+        connection.writeChangeLineWidth()
+    }
+
+    fun undo() {
+        connection.writeUndoLastAction()
+    }
+
+    fun redo() {
+        connection.writeRedoLastAction()
+    }
+
+    fun erase() {
+        connection.writeEraseSection()
     }
 
     override fun onDraw(canvas: Canvas) {

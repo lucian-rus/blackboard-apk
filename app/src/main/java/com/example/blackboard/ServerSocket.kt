@@ -3,6 +3,8 @@ package com.example.blackboard;
 import java.io.OutputStream
 import java.net.ServerSocket
 
+// this has to be updated to inherit a proper class that should implement all the functions that we need
+
 class ServerSocket {
     private val mPort = 8080
 
@@ -40,11 +42,27 @@ class ServerSocket {
         coordinatesQueue.addLast(Pair(x, y))
     }
 
-    fun writeErase() {
+    fun writeChangeColor() {
+        commandsQueue.addLast(1)
+    }
+
+    fun writeClearCanvas() {
         commandsQueue.addLast(2)
     }
 
-    fun writeChangeColor() {
-        commandsQueue.addLast(1)
+    fun writeChangeLineWidth() {
+        commandsQueue.addLast(3)
+    }
+
+    fun writeUndoLastAction() {
+        commandsQueue.addLast(4);
+    }
+
+    fun writeRedoLastAction() {
+        commandsQueue.addLast(5);
+    }
+
+    fun writeEraseSection() {
+        commandsQueue.addLast(6);
     }
 }

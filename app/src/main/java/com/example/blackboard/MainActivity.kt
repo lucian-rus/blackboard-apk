@@ -7,6 +7,17 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.blackboard.databinding.ActivityMainBinding
 
+// will add:
+// * grid
+// * layers
+// * pan
+// * zoom
+// * rotate
+// may add:
+// * grid snapping
+// * lines
+// * arrows
+// * shapes
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
@@ -27,6 +38,18 @@ class MainActivity : AppCompatActivity() {
             }
             colorButton.setOnClickListener{
                 canvasView.changeColor()
+            }
+            lineWidthButton.setOnClickListener{
+                canvasView.changeLineWidth()
+            }
+            undoButton.setOnClickListener{
+                canvasView.undo()
+            }
+            redoButton.setOnClickListener{
+                canvasView.redo()
+            }
+            eraseButton.setOnClickListener{
+                canvasView.erase()
             }
         }
     }

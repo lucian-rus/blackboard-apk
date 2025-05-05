@@ -4,6 +4,8 @@ import java.io.OutputStream
 import java.net.InetAddress
 import java.net.Socket
 
+// this has to be updated to inherit a proper class that should implement all the functions that we need
+
 class ClientSocket {
     private val mAddr = InetAddress.getByName("192.168.0.153")
     private val mPort = 8080
@@ -40,7 +42,7 @@ class ClientSocket {
         coordinatesQueue.addLast(Pair(x, y))
     }
 
-    fun writeErase() {
+    fun writeClearCanvas() {
         commandsQueue.addLast(2)
     }
 
